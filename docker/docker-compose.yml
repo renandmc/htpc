@@ -1,0 +1,125 @@
+version: '3.6'
+
+services:
+  
+  organizr:
+    container_name: organizr
+    image: organizr/organizr
+    ports:
+      - 80:80
+    volumes:
+      - ${DOCKERDIR}/organizr/config:/config
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+  
+  ombi:
+    container_name: ombi
+    image: hotio/ombi
+    ports:
+      - 5000:5000
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK=002
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKERDIR}/ombi/config:/config
+
+  plex:
+    container_name: plex
+    image: plexinc/pms-docker
+    ports:
+      - 32400:32400/tcp
+      - 3005:3005/tcp
+      - 8324:8324/tcp
+      - 32469:32469/tcp
+      - 1900:1900/udp
+      - 32410:32410/udp
+      - 32412:32412/udp
+      - 32413:32413/udp
+      - 32414:32414/udp
+    volumes:
+      - ${DOCKERDIR}/plex/config:/config
+      - ${DOCKERDIR}/plex/transcode/temp:/transcode
+      - ${DATADIR}/media:/data/media
+    environment:
+      - TZ=${TZ}
+      - ADVERTISE_IP=http://10.0.0.123:32400/
+      - PLEX_CLAIM=claim-xt9yRzWr7ZozsBA2Boty
+  
+  qbittorrent:    
+    container_name: qbittorrent
+    image: hotio/qbittorrent
+    ports:
+      - 8080:8080
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK=002
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKERDIR}/qbittorrent/config:/config
+      - ${DATADIR}/torrents:/data/torrents
+  
+  jackett:
+    container_name: jackett
+    image: hotio/jackett
+    ports:
+      - 9117:9117
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=002
+    volumes:
+      - ${DOCKERDIR}/jackett/config:/config
+
+  radarr:
+    container_name: radarr
+    image: hotio/radarr
+    restart: unless-stopped        
+    ports:
+      - 7878:7878    
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/radarr/config:/config
+      - ${DATADIR}:/data
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK=002
+      - TZ=${TZ}
+  
+  sonarr:
+    container_name: sonarr
+    image: hotio/sonarr
+    restart: unless-stopped
+    ports:
+      - 8989:8989
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/sonarr/config:/config
+      - ${DATADIR}:/data
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK=002
+      - TZ=${TZ}
+  
+  bazarr:
+    container_name: bazarr
+    image: hotio/bazarr
+    restart: unless-stopped
+    ports:
+      - 6767:6767
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/bazarr/config:/config
+      - ${DATADIR}/media:/data/media
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK=002
+      - TZ=${TZ}
