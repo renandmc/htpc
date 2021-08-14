@@ -5,6 +5,7 @@ services:
   organizr:
     container_name: organizr
     image: organizr/organizr
+    restart: always
     ports:
       - 80:80
     volumes:
@@ -17,6 +18,7 @@ services:
   ombi:
     container_name: ombi
     image: hotio/ombi
+    restart: always
     ports:
       - 5000:5000
     environment:
@@ -30,6 +32,7 @@ services:
   plex:
     container_name: plex
     image: plexinc/pms-docker
+    restart: always
     ports:
       - 32400:32400/tcp
       - 3005:3005/tcp
@@ -52,6 +55,7 @@ services:
   qbittorrent:    
     container_name: qbittorrent
     image: hotio/qbittorrent
+    restart: always
     ports:
       - 8080:8080
     environment:
@@ -66,6 +70,7 @@ services:
   jackett:
     container_name: jackett
     image: hotio/jackett
+    restart: always
     ports:
       - 9117:9117
     environment:
@@ -79,7 +84,7 @@ services:
   radarr:
     container_name: radarr
     image: hotio/radarr
-    restart: unless-stopped        
+    restart: always    
     ports:
       - 7878:7878    
     volumes:
@@ -95,7 +100,7 @@ services:
   sonarr:
     container_name: sonarr
     image: hotio/sonarr
-    restart: unless-stopped
+    restart: always
     ports:
       - 8989:8989
     volumes:
@@ -111,7 +116,7 @@ services:
   bazarr:
     container_name: bazarr
     image: hotio/bazarr
-    restart: unless-stopped
+    restart: always
     ports:
       - 6767:6767
     volumes:
